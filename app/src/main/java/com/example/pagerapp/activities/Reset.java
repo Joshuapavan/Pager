@@ -2,14 +2,13 @@ package com.example.pagerapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pagerapp.databinding.ActivityResetBinding;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Objects;
 
 public class Reset extends AppCompatActivity {
 
@@ -28,20 +27,14 @@ public class Reset extends AppCompatActivity {
     private void setListeners() {
         binding.getmailButton.setOnClickListener(v->{
             if(binding.email.getText().toString().isEmpty()){
-                Snackbar.make(v,"Please Enter Reset Mail",Snackbar.LENGTH_SHORT).show();
-            }else{
-                mAuth.sendPasswordResetEmail(binding.email.getText().toString())
-                        .addOnCompleteListener(task -> {
-                            if(task.isSuccessful()) {
-                                Snackbar.make(binding.getRoot(), "Mail sent, Check Inbox", Snackbar.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(), Login.class);
-                                startActivity(intent);
-                                finish();
-                            }else{
-                                Snackbar.make(binding.getRoot(),"Error: "+ Objects.requireNonNull(task.getException()).getMessage(),Snackbar.LENGTH_LONG).show();
-                            }
-                        });
+                Snackbar.make(binding.getRoot().getRootView(),"Enter mail",Snackbar.LENGTH_SHORT).show();
 
+            }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()) {
+                Snackbar.make(binding.getRoot().getRootView(), "Invalid Email", Snackbar.LENGTH_SHORT).show();
+            }
+            else{
+                mAuth.sendPasswordResetEmail(binding.email.getText().toString());
+                Snackbar.make(binding.getRoot().getRootView(),"Please check Inbox",Snackbar.LENGTH_SHORT).show();
             }
         });
         binding.backImage.setOnClickListener(v->{

@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
-        tools:ignore="ScrollViewSize">
+        android:background="@color/primaryColor">
 
         <TextView
             android:id="@+id/signNote"
@@ -147,22 +146,6 @@
             app:layout_constraintTop_toBottomOf="@+id/password"
             app:layout_constraintVertical_bias="0.0" />
 
-        <android.widget.Button
-            android:id="@+id/signUpButton"
-            android:layout_width="@dimen/_100sdp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:background="@drawable/login_button_bg"
-            android:fontFamily="@font/ubuntu_medium"
-            android:text="@string/sign_up"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/retypePassword"
-            app:layout_constraintVertical_bias="0.0" />
 
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/userImage"
@@ -178,5 +161,33 @@
             app:layout_constraintTop_toBottomOf="@+id/signNote"
             app:layout_constraintVertical_bias="0.065"
             app:riv_oval="true" />
+
+        <android.widget.Button
+            android:id="@+id/signUpButton"
+            android:layout_width="@dimen/_100sdp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_50sdp"
+            android:background="@drawable/login_button_bg"
+            android:fontFamily="@font/ubuntu_medium"
+            android:text="@string/sign_up"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/retypePassword"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_24sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/retypePassword"
+            app:layout_constraintVertical_bias="0.913" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
