@@ -34,11 +34,12 @@ public class Login extends AppCompatActivity {
         setContentView(binding.getRoot());
         setListeners();
 
-        //Configure Google Sign In
+        // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+
         googleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
 
         //FireBase Auth//

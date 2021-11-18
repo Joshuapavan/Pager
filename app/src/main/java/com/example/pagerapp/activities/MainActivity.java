@@ -1,12 +1,11 @@
-package com.example.pagerapp;
+package com.example.pagerapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.pagerapp.activities.Login;
-import com.example.pagerapp.activities.SignUp;
+import com.example.pagerapp.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
