@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/primaryColor">
 
         <TextView
@@ -48,9 +48,9 @@
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="52dp"
+            android:layout_margin="@dimen/_20sdp"
             android:layout_marginTop="88dp"
             android:autofillHints="auto"
-            android:layout_margin="@dimen/_20sdp"
             android:background="@drawable/mail_password_bg"
             android:drawableStart="@drawable/ic_email"
             android:drawablePadding="@dimen/_10sdp"
@@ -72,8 +72,8 @@
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:layout_marginTop="@dimen/_20sdp"
             android:layout_margin="@dimen/_20sdp"
+            android:layout_marginTop="@dimen/_20sdp"
             android:autofillHints="auto"
             android:background="@drawable/mail_password_bg"
             android:drawableStart="@drawable/ic_password"
@@ -179,14 +179,14 @@
             android:background="@drawable/signup_button_bg"
             android:drawableStart="@drawable/ic_google"
             android:fontFamily="@font/ubuntu_medium"
-            android:paddingStart="@dimen/_10sdp"
+            android:paddingStart="@dimen/_15sdp"
             android:paddingEnd="@dimen/_27sdp"
             android:text="@string/google"
             android:textAllCaps="false"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.512"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/signUpButton"
             app:layout_constraintVertical_bias="0.0" />

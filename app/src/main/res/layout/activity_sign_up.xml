@@ -20,7 +20,7 @@
             android:fontFamily="@font/ubuntu_medium"
             android:text="@string/please_sign_in"
             android:textColor="@color/secondaryText"
-            android:textSize="@dimen/_25ssp"
+            android:textSize="@dimen/_15ssp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

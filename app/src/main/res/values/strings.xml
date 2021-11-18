@@ -16,5 +16,8 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="add_change_image">Add / Change Image</string>
     <string name="data_added">Data Added</string>
+    <string name="logout">Logout</string>
+    <string name="enter_reset_mail">Enter reset mail</string>
+    <string name="get_mail">Get Mail</string>
 
 </resources>

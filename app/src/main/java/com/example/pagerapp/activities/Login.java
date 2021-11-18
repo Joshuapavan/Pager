@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -61,7 +62,11 @@ public class Login extends AppCompatActivity {
                 Snackbar.make(v,"Please, fill all Credentials",Snackbar.LENGTH_SHORT).show();
             }
         });
-        binding.forgotPassword.setOnClickListener(v-> Snackbar.make(v,"Forgot Password",Snackbar.LENGTH_SHORT).show());
+        binding.forgotPassword.setOnClickListener(v->{
+            Intent intent = new Intent(getApplicationContext(),Reset.class);
+            startActivity(intent);
+            finish();
+        });
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -95,7 +100,7 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("Login Activity", "signInWithCredential:success");
-                        Intent intent =  new Intent(getApplicationContext(),SignUp.class);
+                        Intent intent =  new Intent(getApplicationContext(),MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
