@@ -27,14 +27,14 @@ public class Reset extends AppCompatActivity {
     private void setListeners() {
         binding.getmailButton.setOnClickListener(v->{
             if(binding.email.getText().toString().isEmpty()){
-                Snackbar.make(binding.getRoot().getRootView(),"Enter mail",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.resetLayout,"Enter mail",Snackbar.LENGTH_SHORT).show();
 
             }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()) {
-                Snackbar.make(binding.getRoot().getRootView(), "Invalid Email", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.resetLayout, "Invalid Email", Snackbar.LENGTH_SHORT).show();
             }
             else{
                 mAuth.sendPasswordResetEmail(binding.email.getText().toString());
-                Snackbar.make(binding.getRoot().getRootView(),"Please check Inbox",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.resetLayout,"Please check Inbox",Snackbar.LENGTH_SHORT).show();
             }
         });
         binding.backImage.setOnClickListener(v->{

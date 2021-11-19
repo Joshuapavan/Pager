@@ -14,6 +14,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.pagerapp.databinding.ActivitySignUpBinding;
 import com.example.pagerapp.utilities.Constants;
 import com.example.pagerapp.utilities.PreferenceManager;
@@ -50,6 +51,7 @@ public class SignUp extends AppCompatActivity {
         if(user != null) { //if the user logged in with google's firebase//
             binding.userName.setText(user.getDisplayName());
             binding.email.setText(user.getEmail());
+            Glide.with(getApplicationContext()).load(mAuth.getCurrentUser().getPhotoUrl()).into(binding.userImage);
         }
     }
 
@@ -150,7 +152,6 @@ public class SignUp extends AppCompatActivity {
                             InputStream inputStream = getContentResolver().openInputStream(imageUri); //getting the image Uri using input Stream//
                             Bitmap bitmap = BitmapFactory.decodeStream(inputStream); //building a bitmap from the uri using bitmap Factory//
                             binding.userImage.setImageBitmap(bitmap);//setting up the user Image//
-                            binding.addImage.setVisibility(View.INVISIBLE);
                             encodedImage = encodeImage(bitmap);//encodes the image//
                         }catch (FileNotFoundException exception){
                             exception.printStackTrace();

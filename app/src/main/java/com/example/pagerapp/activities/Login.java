@@ -1,10 +1,11 @@
 package com.example.pagerapp.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pagerapp.R;
 import com.example.pagerapp.databinding.ActivityLoginBinding;
@@ -13,7 +14,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
@@ -59,7 +59,10 @@ public class Login extends AppCompatActivity {
         });
         binding.loginButton.setOnClickListener(v->{
             if(binding.email.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()){
-                Snackbar.make(v,"Please, fill all Credentials",Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.loginLayout,"Please, fill all Credentials",Snackbar.LENGTH_SHORT).show();
+            }
+            else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()) {
+                Snackbar.make(binding.loginLayout, "Invalid Email", Snackbar.LENGTH_SHORT).show();
             }
         });
         binding.forgotPassword.setOnClickListener(v->{

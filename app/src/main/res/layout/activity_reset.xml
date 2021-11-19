@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primaryColor"
-    tools:context=".activities.Reset">
+    tools:context=".activities.Reset"
+    android:id="@+id/resetLayout">
 
     <ImageView
         android:id="@+id/backImage"
