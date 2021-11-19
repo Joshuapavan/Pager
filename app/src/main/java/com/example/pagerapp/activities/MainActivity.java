@@ -1,6 +1,5 @@
 package com.example.pagerapp.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,13 +19,5 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        if (user == null) {
-            Intent loginIntent = new Intent(getApplicationContext(), Login.class);
-            startActivity(loginIntent);
-            finish();
-        }
     }
 }

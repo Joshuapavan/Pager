@@ -14,7 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.pagerapp.databinding.ActivitySignUpBinding;
 import com.example.pagerapp.utilities.Constants;
 import com.example.pagerapp.utilities.PreferenceManager;
@@ -99,7 +98,7 @@ public class SignUp extends AppCompatActivity {
                     startActivity(intent);
                 }).addOnFailureListener(exception ->{ //this block will be executed when there is an issue with the user's login//
                     loading(false);
-                    Snackbar.make(binding.getRoot().getRootView(), Objects.requireNonNull(exception.getMessage()),Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(binding.signInLayout, Objects.requireNonNull(exception.getMessage()),Snackbar.LENGTH_SHORT).show();
         });
 
     }
@@ -107,25 +106,25 @@ public class SignUp extends AppCompatActivity {
     //Method to Valid if user is entering proper valid Credentials//
     private Boolean isValidSignupDetails(){
         if(encodedImage == null){
-            Snackbar.make(binding.getRoot().getRootView(),"Add a profile Image",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Add a profile Image",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(binding.userName.getText().toString().trim().isEmpty()){
-            Snackbar.make(binding.getRoot().getRootView(),"Username is empty",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Username is empty",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(binding.email.getText().toString().trim().isEmpty()){
-            Snackbar.make(binding.getRoot().getRootView(),"Email is empty",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Email is empty",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()){
-            Snackbar.make(binding.getRoot().getRootView(),"Invalid Email",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Invalid Email",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(binding.password.getText().toString().trim().isEmpty()){
-            Snackbar.make(binding.getRoot().getRootView(),"Enter password",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Enter password",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(binding.retypePassword.getText().toString().trim().isEmpty()){
-            Snackbar.make(binding.getRoot().getRootView(),"Confirm your password",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Confirm your password",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else if(!(binding.password.getText().toString()).equals(binding.retypePassword.getText().toString())){
-            Snackbar.make(binding.getRoot().getRootView(),"Passwords don't match",Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(binding.signInLayout,"Passwords don't match",Snackbar.LENGTH_SHORT).show();
             return (false);
         }else{
             return(true);

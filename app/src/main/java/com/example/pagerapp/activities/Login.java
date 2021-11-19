@@ -100,7 +100,7 @@ public class Login extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("Login Activity", "signInWithCredential:success");
-                        Intent intent =  new Intent(getApplicationContext(),MainActivity.class);
+                        Intent intent =  new Intent(getApplicationContext(),SignUp.class);
                         startActivity(intent);
                         finish();
                     } else {
