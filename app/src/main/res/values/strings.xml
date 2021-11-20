@@ -19,5 +19,6 @@
     <string name="logout">Logout</string>
     <string name="enter_reset_mail">Enter reset mail</string>
     <string name="get_mail">Get Mail</string>
+    <string name="search">Search</string>
 
 </resources>
