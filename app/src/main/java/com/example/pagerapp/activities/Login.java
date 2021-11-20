@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pagerapp.R;
 import com.example.pagerapp.databinding.ActivityLoginBinding;
+import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -19,6 +22,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class Login extends AppCompatActivity {
@@ -28,9 +33,18 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private GoogleSignInClient googleSignInClient;
 
+    private PreferenceManager preferenceManager; //Instantiating preferenceManager class under utilities to get the user details//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        preferenceManager = new PreferenceManager(getApplicationContext());
+        if(preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
+            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setListeners();
@@ -58,11 +72,8 @@ public class Login extends AppCompatActivity {
             finish();
         });
         binding.loginButton.setOnClickListener(v->{
-            if(binding.email.getText().toString().isEmpty() || binding.password.getText().toString().isEmpty()){
-                Snackbar.make(binding.loginLayout,"Please, fill all Credentials",Snackbar.LENGTH_SHORT).show();
-            }
-            else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()) {
-                Snackbar.make(binding.loginLayout, "Invalid Email", Snackbar.LENGTH_SHORT).show();
+            if(isValidLogInCredentials()){
+                logIn();
             }
         });
         binding.forgotPassword.setOnClickListener(v->{
@@ -111,5 +122,55 @@ public class Login extends AppCompatActivity {
                         Log.w("Login Activity", "signInWithCredential:failure", task.getException());
                     }
                 });
+    }
+
+    private void logIn(){
+        loadingAnimation(true);
+        FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+        firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
+                .whereEqualTo(Constants.KEY_EMAIL,binding.email.getText().toString().trim())
+                .whereEqualTo(Constants.KEY_PASSWORD,binding.password.getText().toString().trim())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() >0){
+                        DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0); //used to fetch data from the Firestore  which can be later checked in the given data//
+                        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN,true); //assigning that the user has logged in and initialising all preference variables//
+                        preferenceManager.putString(Constants.KEY_USER_ID,documentSnapshot.getId());
+                        preferenceManager.putString(Constants.KEY_NAME,documentSnapshot.getString(Constants.KEY_NAME));
+                        preferenceManager.putString(Constants.KEY_IMAGE,documentSnapshot.getString(Constants.KEY_IMAGE));
+                        Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        loadingAnimation(false);
+                        Snackbar.make(binding.loginLayout,"Invalid Credentials",Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void loadingAnimation(Boolean isLoading){ //to set the loading of  the progress bar//
+        if(isLoading){
+            binding.loginButton.setVisibility(View.INVISIBLE);
+            binding.progressBar.setVisibility(View.VISIBLE);
+        }else{
+            binding.progressBar.setVisibility(View.INVISIBLE);
+            binding.loginButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private Boolean isValidLogInCredentials(){ //to check if the user has given proper credentials//
+        if(binding.email.getText().toString().trim().isEmpty()) {
+            Snackbar.make(binding.loginLayout, "Enter email", Snackbar.LENGTH_SHORT).show();
+            return (false);
+        }else if(!Patterns.EMAIL_ADDRESS.matcher(binding.email.getText().toString()).matches()) {
+            Snackbar.make(binding.loginLayout, "Invalid Email", Snackbar.LENGTH_SHORT).show();
+            return (false);
+        }else if(binding.password.getText().toString().trim().isEmpty()){
+            Snackbar.make(binding.loginLayout,"Enter password",Snackbar.LENGTH_SHORT).show();
+            return (false);
+        }else {
+            return (true);
+        }
     }
 }

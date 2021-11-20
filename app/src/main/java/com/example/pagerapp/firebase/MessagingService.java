@@ -1,11 +1,11 @@
 package com.example.pagerapp.firebase;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+//Firebase Cloud messaging service class which generates a key for all the messages and encrypts them//
 public class MessagingService extends FirebaseMessagingService {
 
     @Override

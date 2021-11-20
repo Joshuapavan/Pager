@@ -3,13 +3,16 @@ package com.example.pagerapp.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+//Shared Preference to store and Cache data//
 public class PreferenceManager {
     private final SharedPreferences sharedPreferences;
 
+    //constructor for the preference Class//
     public PreferenceManager(Context context){
         sharedPreferences = context.getSharedPreferences(Constants.KEY_PREFERENCE_NAME,Context.MODE_PRIVATE);
     }
 
+    //Getters and setters for the shared preference data //
     public void putBoolean(String key, Boolean value){
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(key,value);
