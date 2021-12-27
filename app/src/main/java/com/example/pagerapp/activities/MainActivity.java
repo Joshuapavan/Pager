@@ -26,8 +26,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         preferenceManager = new PreferenceManager(getApplicationContext());
+        setListeners();
         loadUserDetails();
         getToken();
+    }
+    private void setListeners(){
+        binding.searchIcon.setOnClickListener(v->{
+            Snackbar.make(binding.mainLayout,"Search",Snackbar.LENGTH_SHORT).show();
+        });
+        binding.userImage.setOnClickListener(v->{
+            Snackbar.make(binding.mainLayout,"User Image",Snackbar.LENGTH_SHORT).show();
+        });
     }
 
     private void loadUserDetails(){
@@ -45,10 +54,7 @@ public class MainActivity extends AppCompatActivity {
         DocumentReference documentReference = firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
                 .document(preferenceManager.getString(Constants.KEY_USER_ID));
         documentReference.update(Constants.KEY_FCM_TOKEN,token)
-                .addOnSuccessListener(unused -> {
-                    Snackbar.make(binding.mainLayout,"Token updated",Snackbar.LENGTH_SHORT).show();
-                }).addOnFailureListener(exceptiion ->{
-                    Snackbar.make(binding.mainLayout, "Unable to update token",Snackbar.LENGTH_SHORT).show();
-        });
+                .addOnSuccessListener(task -> Snackbar.make(binding.mainLayout,"Welcome "+preferenceManager.getString(Constants.KEY_NAME)+"!",Snackbar.LENGTH_SHORT).show())
+                .addOnFailureListener(exception -> Snackbar.make(binding.mainLayout, "Unable to update token, Please restart the app.",Snackbar.LENGTH_SHORT).show());
     }
 }

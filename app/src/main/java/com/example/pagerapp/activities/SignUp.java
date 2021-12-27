@@ -99,7 +99,7 @@ public class SignUp extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }).addOnFailureListener(exception ->{ //this block will be executed when there is an issue with the user's login//
-                    loading(false);
+                     loading(false);
                     Snackbar.make(binding.signInLayout, Objects.requireNonNull(exception.getMessage()),Snackbar.LENGTH_SHORT).show();
         });
 
