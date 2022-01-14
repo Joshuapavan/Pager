@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/_30sdp"
         android:background="@drawable/mail_password_bg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,39 +21,55 @@
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:scaleType="centerCrop"
             android:background="@drawable/ic_add_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:riv_oval="true"/>
+            app:riv_oval="true" />
 
         <EditText
             android:id="@+id/searchBox"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_2sdp"
             android:layout_marginEnd="@dimen/_40sdp"
             android:background="@drawable/mail_password_bg"
             android:hint="@string/search"
-            android:padding="@dimen/_10sdp"
+            android:padding="@dimen/_5sdp"
             android:textColor="@color/primaryText"
             android:textColorHint="@color/secondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/searchIcon"
+            app:layout_constraintHorizontal_bias="0.506"
             app:layout_constraintStart_toEndOf="@id/userImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.538"
+            android:importantForAutofill="no"
+            android:inputType="text" />
 
         <ImageView
             android:id="@+id/searchIcon"
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
             android:layout_margin="@dimen/_5sdp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="@string/search" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/newChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_image_plus"
+        android:layout_marginEnd="@dimen/_24sdp"
+        android:layout_marginBottom="@dimen/_25sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/app_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

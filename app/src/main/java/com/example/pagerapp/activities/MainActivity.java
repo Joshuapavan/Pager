@@ -1,5 +1,6 @@
 package com.example.pagerapp.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,12 +32,9 @@ public class MainActivity extends AppCompatActivity {
         getToken();
     }
     private void setListeners(){
-        binding.searchIcon.setOnClickListener(v->{
-            Snackbar.make(binding.mainLayout,"Search",Snackbar.LENGTH_SHORT).show();
-        });
-        binding.userImage.setOnClickListener(v->{
-            Snackbar.make(binding.mainLayout,"User Image",Snackbar.LENGTH_SHORT).show();
-        });
+        binding.searchIcon.setOnClickListener(v -> Snackbar.make(binding.mainLayout, "Search", Snackbar.LENGTH_SHORT).show());
+        binding.userImage.setOnClickListener(v -> Snackbar.make(binding.mainLayout, "User Image", Snackbar.LENGTH_SHORT).show());
+        binding.newChat.setOnClickListener(v-> startActivity(new Intent(getApplicationContext(),UserActivity.class)));
     }
 
     private void loadUserDetails(){

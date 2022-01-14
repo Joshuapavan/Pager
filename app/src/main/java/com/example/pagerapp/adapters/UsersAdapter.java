@@ -11,17 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pagerapp.databinding.UserContainerBinding;
+import com.example.pagerapp.listeners.UserListener;
 import com.example.pagerapp.models.User;
 
 import java.util.List;
 
 public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.userViewHolder> {
 
-    public UsersAdapter(List<User> users) {
-        this.users = users;
-    }
-
     private final List<User> users;
+    private final UserListener userListener;
+
+
+    public UsersAdapter(List<User> users, UserListener userListener) {
+        this.users = users;
+        this.userListener = userListener;
+    }
 
     UserContainerBinding binding;
 
@@ -29,6 +33,7 @@ public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.userViewHol
     @Override
     public UsersAdapter.userViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         UserContainerBinding userContainerBinding = UserContainerBinding.inflate(LayoutInflater.from(parent.getContext()),parent,false);
+
         return (new userViewHolder(userContainerBinding));
     }
 
@@ -51,11 +56,12 @@ public class UsersAdapter extends  RecyclerView.Adapter<UsersAdapter.userViewHol
         void setUserData(User user){
             binding.name.setText(user.name);
             binding.message.setText(user.email);
-            binding.profileImage.setImageBitmap(getuserImage(user.image));
+            binding.profileImage.setImageBitmap(getUserImage(user.image));
+            binding.getRoot().setOnClickListener(v-> userListener.onUserListenerClicked(user));
         }
     }
 
-    private Bitmap getuserImage(String encodedImage){
+    private Bitmap getUserImage(String encodedImage){
         byte[] bytes = Base64.decode(encodedImage,Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
     }

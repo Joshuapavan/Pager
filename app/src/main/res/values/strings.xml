@@ -20,5 +20,6 @@
     <string name="enter_reset_mail">Enter reset mail</string>
     <string name="get_mail">Get Mail</string>
     <string name="search">Search</string>
+    <string name="search_new_connection">Add new connection</string>
 
 </resources>
