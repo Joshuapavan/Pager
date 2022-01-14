@@ -37,6 +37,7 @@ public class UserActivity extends AppCompatActivity implements UserListener {
 
     void setListeners(){
         binding.back.setOnClickListener(v-> onBackPressed());
+        binding.chat.setOnClickListener(v-> onBackPressed());
     }
 
     void getUsers(){

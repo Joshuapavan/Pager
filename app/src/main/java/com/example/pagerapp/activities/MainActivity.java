@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void setListeners(){
         binding.searchIcon.setOnClickListener(v -> Snackbar.make(binding.mainLayout, "Search", Snackbar.LENGTH_SHORT).show());
-        binding.userImage.setOnClickListener(v -> Snackbar.make(binding.mainLayout, "User Image", Snackbar.LENGTH_SHORT).show());
+        binding.userImage.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(),Profile.class)));
         binding.newChat.setOnClickListener(v-> startActivity(new Intent(getApplicationContext(),UserActivity.class)));
     }
 

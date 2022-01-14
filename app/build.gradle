@@ -50,12 +50,12 @@ dependencies {
 
     //Google Authentication / Google Sign In FireBase Authentication, FireBase Messaging and FireStore//
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    implementation 'com.google.android.gms:play-services-auth:20.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
     implementation 'com.google.firebase:firebase-messaging:23.0.0'
     implementation 'com.google.firebase:firebase-firestore:24.0.0'
 
     //To Avoid FireBase UID error//
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.0'
 
     //Glide Dependency, Used to get User Profile Picture from Google Client//
     implementation 'com.github.bumptech.glide:glide:4.12.0'
