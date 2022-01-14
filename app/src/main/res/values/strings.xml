@@ -22,5 +22,6 @@
     <string name="search_new_connection">Add new connection</string>
     <string name="your_profile">Your Profile</string>
     <string name="logout">Logout</string>
+    <string name="message">Message</string>
 
 </resources>
