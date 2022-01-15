@@ -19,6 +19,7 @@ import com.example.pagerapp.models.ChatMessage;
 import com.example.pagerapp.models.User;
 import com.example.pagerapp.utilities.Constants;
 import com.example.pagerapp.utilities.PreferenceManager;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -141,7 +142,15 @@ public class ChatActivity extends AppCompatActivity {
 
     void setListeners(){
         binding.backImage.setOnClickListener(v-> onBackPressed());
-        binding.sendButton.setOnClickListener(this::sendMessage);
+        binding.sendButton.setOnClickListener(v->{
+            if(binding.message.getText().toString().isEmpty()){
+                Snackbar.make(binding.chatLayout,"Please Enter a message",Snackbar.LENGTH_SHORT).show();
+                binding.message.setText(null);
+            }else{
+                sendMessage(v);
+            }
+                }
+        );
         binding.emoji.setOnClickListener(v -> addEmoji());
     }
 
