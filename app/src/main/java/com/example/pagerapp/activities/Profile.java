@@ -23,6 +23,7 @@ public class Profile extends AppCompatActivity {
     ActivityProfileBinding binding;
 
     private PreferenceManager preferenceManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

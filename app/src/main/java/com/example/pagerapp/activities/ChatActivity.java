@@ -70,7 +70,7 @@ public class ChatActivity extends AppCompatActivity {
 
     void addEmoji(){
         EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(
-                binding.getRoot()
+                binding.chatLayout
         ).build(binding.message);
 
         binding.emoji.setOnClickListener(v-> emojiPopup.toggle());
@@ -78,11 +78,10 @@ public class ChatActivity extends AppCompatActivity {
 
     void sendMessage(View v){
         HashMap<String, Object> message = new HashMap<>();
-        EmojiTextView emojiTextView = (EmojiTextView) LayoutInflater
+        EmojiTextView emojiTextView = (EmojiTextView) LayoutInflater // Google Emoji Keyboard//
                 .from(v.getContext())
                 .inflate(R.layout.emoji_text_view,binding.chatLayout,false);
         emojiTextView.setText(binding.message.getText().toString());
-        binding.chatLayout.addView(emojiTextView);
 
         message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
         message.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
