@@ -31,7 +31,8 @@
         <entry key="app/src/main/res/layout/activity_reset.xml" value="0.21052631578947367" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_user.xml" value="0.2194078947368421" />
-        <entry key="app/src/main/res/layout/recived_messages_container.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/emoji_text_view.xml" value="0.34739583333333335" />
+        <entry key="app/src/main/res/layout/recived_messages_container.xml" value="0.335" />
         <entry key="app/src/main/res/layout/sent_messages_container.xml" value="0.34739583333333335" />
         <entry key="app/src/main/res/layout/user_container.xml" value="0.25503683578498054" />
       </map>

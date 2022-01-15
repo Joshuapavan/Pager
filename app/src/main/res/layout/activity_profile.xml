@@ -37,8 +37,8 @@
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/userImage"
         android:scaleType="centerCrop"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_60sdp"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_100sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

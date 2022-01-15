@@ -57,8 +57,9 @@ public class UserActivity extends AppCompatActivity implements UserListener {
                             User user = new User();
                             user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
                             user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
-                            user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
+                            user.image = (queryDocumentSnapshot.getString(Constants.KEY_IMAGE));
                             user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            user.id = queryDocumentSnapshot.getId();
                             users.add(user);
                         }
                         if(users.size() > 0){
@@ -90,6 +91,9 @@ public class UserActivity extends AppCompatActivity implements UserListener {
 
     @Override
     public void onUserListenerClicked(User user) {
-//        Intent intent = new Intent(getApplicationContext(),Chat)
+        Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+        intent.putExtra(Constants.KEY_USER,user);
+        startActivity(intent);
+        finish();
     }
 }

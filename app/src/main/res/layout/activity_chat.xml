@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
+    android:id="@+id/chatLayout"
     android:background="@color/primaryColor"
     tools:context=".activities.ChatActivity">
 
@@ -32,10 +33,10 @@
         <TextView
             android:id="@+id/userName"
             android:layout_width="wrap_content"
-            android:layout_height="9dp"
+            android:layout_height="wrap_content"
             android:ellipsize="end"
             android:textColor="@color/primaryText"
-            android:textSize="@dimen/_7sdp"
+            android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/userImage"
             app:layout_constraintHorizontal_bias="0.5"
@@ -47,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/secondaryText"
-            android:textSize="@dimen/_3sdp"
+            android:textSize="@dimen/_7sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/userImage"
             app:layout_constraintHorizontal_bias="0.5"
@@ -68,7 +69,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
@@ -82,10 +82,12 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        app:stackFromEnd="true" />
+
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         android:layout_width="@dimen/_25sdp"
         android:layout_height="@dimen/_25sdp"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,8 +110,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_34sdp"
-            android:layout_marginEnd="@dimen/_40sdp"
+            android:layout_marginEnd="@dimen/_47sdp"
+            android:padding="@dimen/_10ssp"
             android:hint="@string/message"
+            android:textColor="@color/primaryText"
+            android:maxLines="3"
+            android:background="@drawable/mail_password_bg"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
