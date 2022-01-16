@@ -13,12 +13,15 @@
         android:layout_width="@dimen/_20sdp"
         android:layout_height="@dimen/_20sdp"
         android:layout_margin="@dimen/_5sdp"
-        android:layout_marginStart="@dimen/_24sdp"
         android:layout_marginTop="@dimen/_24sdp"
         android:contentDescription="@string/app_name"
         android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toTopOf="@+id/yourProfileLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/yourProfileLabel"
@@ -50,7 +53,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_24sdp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginStart="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_20sdp"
         android:background="@drawable/mail_password_bg"
@@ -76,62 +79,19 @@
             android:id="@+id/userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryText"
-            android:textAllCaps="false"
-            android:textSize="@dimen/_10sdp"
             android:padding="@dimen/_2sdp"
             android:paddingTop="@dimen/_4sdp"
             android:paddingBottom="@dimen/_4sdp"
+            android:textAllCaps="false"
+            android:textColor="@color/primaryText"
+            android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.055"
             app:layout_constraintStart_toEndOf="@+id/ImageProfile"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.769" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_20sdp"
-        android:layout_marginStart="@dimen/_20sdp"
-        android:layout_marginEnd="@dimen/_20sdp"
-        android:background="@drawable/mail_password_bg"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintVertical_bias="0.064">
-
-        <ImageView
-            android:id="@+id/ImageEmail"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:layout_margin="@dimen/_5sdp"
-            android:src="@drawable/ic_email"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/app_name" />
-
-        <TextView
-            android:id="@+id/userEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/primaryText"
-            android:textSize="@dimen/_10sdp"
-            android:textAllCaps="false"
-            android:padding="@dimen/_2sdp"
-            android:paddingTop="@dimen/_4sdp"
-            android:paddingBottom="@dimen/_4sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.049"
-            app:layout_constraintStart_toEndOf="@+id/ImageEmail"
             app:layout_constraintTop_toTopOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

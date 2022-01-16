@@ -1,10 +1,14 @@
 package com.example.pagerapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
@@ -16,6 +20,8 @@ import com.example.pagerapp.adapters.ChatAdapter;
 import com.example.pagerapp.databinding.ActivityChatBinding;
 import com.example.pagerapp.models.ChatMessage;
 import com.example.pagerapp.models.User;
+import com.example.pagerapp.network.ApiClient;
+import com.example.pagerapp.network.ApiService;
 import com.example.pagerapp.utilities.Constants;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,6 +35,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.EmojiTextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +48,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class ChatActivity extends BaseActivity {
@@ -83,33 +97,106 @@ public class ChatActivity extends BaseActivity {
         binding.emoji.setOnClickListener(v-> emojiPopup.toggle());
     }
 
-    void sendMessage(View v){
-        HashMap<String, Object> message = new HashMap<>();
-        EmojiTextView emojiTextView = (EmojiTextView) LayoutInflater // Google Emoji Keyboard//
-                .from(v.getContext())
-                .inflate(R.layout.emoji_text_view,binding.chatLayout,false);
-        emojiTextView.setText(binding.message.getText().toString());
-
-        message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
-        message.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
-        message.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
-        message.put(Constants.KEY_TIMESTAMP,new Date());
-        database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
-        if(conversationId != null){
-            updateConversation(binding.message.getText().toString());
-        }else{
-            HashMap<String, Object> conversation = new HashMap<>();
-            conversation.put(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
-            conversation.put(Constants.KEY_SENDERS_NAME,preferenceManager.getString(Constants.KEY_NAME));
-            conversation.put(Constants.KEY_SENDERS_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
-            conversation.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
-            conversation.put(Constants.KEY_RECEIVERS_NAME,receiverUser.name);
-            conversation.put(Constants.KEY_RECEIVERS_IMAGE,receiverUser.image);
-            conversation.put(Constants.KEY_LAST_MESSAGE,binding.message.getText().toString());
-            conversation.put(Constants.KEY_TIMESTAMP,new Date());
-            addConversation(conversation);
+    Boolean isConnectedToInternet(){
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = null;
+        if (manager != null) {
+            networkInfo = manager.getActiveNetworkInfo();
         }
-        binding.message.setText(null);
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+    void sendMessage(View v){
+        if(isConnectedToInternet()){
+            HashMap<String, Object> message = new HashMap<>();
+            EmojiTextView emojiTextView = (EmojiTextView) LayoutInflater // Google Emoji Keyboard//
+                    .from(v.getContext())
+                    .inflate(R.layout.emoji_text_view,binding.chatLayout,false);
+            emojiTextView.setText(binding.message.getText().toString());
+
+            message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
+            message.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
+            message.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
+            message.put(Constants.KEY_TIMESTAMP,new Date());
+            database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+            if(conversationId != null){
+                updateConversation(binding.message.getText().toString());
+            }else{
+                HashMap<String, Object> conversation = new HashMap<>();
+                conversation.put(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
+                conversation.put(Constants.KEY_SENDERS_NAME,preferenceManager.getString(Constants.KEY_NAME));
+                conversation.put(Constants.KEY_SENDERS_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
+                conversation.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
+                conversation.put(Constants.KEY_RECEIVERS_NAME,receiverUser.name);
+                conversation.put(Constants.KEY_RECEIVERS_IMAGE,receiverUser.image);
+                conversation.put(Constants.KEY_LAST_MESSAGE,binding.message.getText().toString());
+                conversation.put(Constants.KEY_TIMESTAMP,new Date());
+                addConversation(conversation);
+            }
+            if (!isReceiverAvailable){
+                try{
+                    JSONArray tokens = new JSONArray();
+                    tokens.put(receiverUser.token);
+
+                    JSONObject data = new JSONObject();
+                    data.put(Constants.KEY_USER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
+                    data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
+                    data.put(Constants.KEY_FCM_TOKEN,preferenceManager.getString(Constants.KEY_FCM_TOKEN));
+                    data.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
+
+                    JSONObject body = new JSONObject();
+                    body.put(Constants.REMOTE_MSG_DATA, data);
+                    body.put(Constants.REMOTE_MSG_REGISTRATION_IDS,tokens);
+
+                    sendNotification(body.toString());
+
+                }catch (Exception e){
+                    showSnackBar(e.getMessage());
+                }
+            }
+            binding.message.setText(null);
+        }
+        else{
+            showSnackBar("No Internet, please check your internet");
+        }
+
+    }
+
+    void showSnackBar(String message){
+        Snackbar.make(binding.chatLayout,message,Snackbar.LENGTH_SHORT).show();
+    }
+
+
+    private void sendNotification(String messageBody){
+        ApiClient.getClient().create(ApiService.class).sendMessage(
+                Constants.getRemoteMsgHeaders(),
+                messageBody
+        ).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call,@NonNull Response<String> response) {
+                if(response.isSuccessful()){
+                    try{
+                        if(response.body() != null){
+                            JSONObject responseJson = new JSONObject(response.body());
+                            JSONArray results = responseJson.getJSONArray("results");
+                            if(responseJson.getInt("failure") == 1){
+                                JSONObject error = (JSONObject) results.get(0);
+                                showSnackBar(error.getString("error"));
+                            }
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                    }
+                }else{
+                    showSnackBar("Error: "+response.code());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call,@NonNull Throwable t) {
+                showSnackBar(t.getMessage());
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged") //Dynamic chat assignment method //
@@ -159,6 +246,12 @@ public class ChatActivity extends BaseActivity {
                             ).intValue();
                             isReceiverAvailable = availability == 1;
                         }
+                        receiverUser.token = value.getString(Constants.KEY_FCM_TOKEN);
+                        if(receiverUser.image == null){
+                            receiverUser.image = value.getString(Constants.KEY_IMAGE);
+                            chatAdapter.setReceiverProfileImage(getBitmapFromEncodedString(receiverUser.image));
+                            chatAdapter.notifyItemRangeChanged(0,chatMessages.size());
+                        }
                     }
                     if(isReceiverAvailable){
                         binding.userStatus.setText(R.string.online);
@@ -182,8 +275,12 @@ public class ChatActivity extends BaseActivity {
     }
 
     Bitmap getBitmapFromEncodedString(String encodedImage){
-        byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        if(encodedImage != null){
+            byte[] bytes = Base64.decode(encodedImage, Base64.DEFAULT);
+            return BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+        }else{
+            return null;
+        }
     }
 
     void setListeners(){

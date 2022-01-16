@@ -39,7 +39,6 @@ public class Profile extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         binding.userImage.setImageBitmap(bitmap);
         binding.userName.setText(preferenceManager.getString(Constants.KEY_NAME));
-        binding.userEmail.setText(preferenceManager.getString(Constants.KEY_EMAIL));
     }
 
     void setListeners(){
