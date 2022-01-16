@@ -12,8 +12,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:background="@drawable/mail_password_bg"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -39,9 +39,9 @@
             android:textSize="@dimen/_10sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/userImage"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/backImage"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.294" />
 
         <TextView
             android:id="@+id/userStatus"
@@ -59,13 +59,14 @@
             android:id="@+id/backImage"
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
-            android:layout_margin="@dimen/_5sdp"
+            android:layout_marginStart="@dimen/_10sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_back"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/userImage"
+            app:layout_constraintHorizontal_bias="0.009"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.615" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -100,7 +101,7 @@
         android:id="@+id/chatInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primaryColor"
+        android:background="@drawable/container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -115,7 +116,7 @@
             android:hint="@string/message"
             android:textColor="@color/primaryText"
             android:maxLines="3"
-            android:background="@drawable/mail_password_bg"
+            android:background="@drawable/container"
             android:imeOptions="actionDone"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
@@ -142,7 +143,6 @@
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5sdp"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_send"
             app:layout_constraintBottom_toBottomOf="parent"

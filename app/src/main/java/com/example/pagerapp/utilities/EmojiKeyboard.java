@@ -1,11 +1,11 @@
-package com.example.pagerapp;
+package com.example.pagerapp.utilities;
 
 import android.app.Application;
 
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
-public class EmojiApp extends Application {
+public class EmojiKeyboard extends Application {
 
     @Override
     public void onCreate() {

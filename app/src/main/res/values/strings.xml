@@ -23,5 +23,7 @@
     <string name="your_profile">Your Profile</string>
     <string name="logout">Logout</string>
     <string name="message">Message</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
 
 </resources>

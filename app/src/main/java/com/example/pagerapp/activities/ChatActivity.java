@@ -1,7 +1,6 @@
 package com.example.pagerapp.activities;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
@@ -19,8 +18,11 @@ import com.example.pagerapp.models.ChatMessage;
 import com.example.pagerapp.models.User;
 import com.example.pagerapp.utilities.Constants;
 import com.example.pagerapp.utilities.PreferenceManager;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -35,9 +37,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends BaseActivity {
 
     ActivityChatBinding binding;
     User receiverUser;
@@ -45,6 +48,9 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter chatAdapter;
     PreferenceManager preferenceManager;
     FirebaseFirestore database;
+    String conversationId = null;
+
+    private Boolean isReceiverAvailable = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +95,20 @@ public class ChatActivity extends AppCompatActivity {
         message.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
         message.put(Constants.KEY_TIMESTAMP,new Date());
         database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+        if(conversationId != null){
+            updateConversation(binding.message.getText().toString());
+        }else{
+            HashMap<String, Object> conversation = new HashMap<>();
+            conversation.put(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
+            conversation.put(Constants.KEY_SENDERS_NAME,preferenceManager.getString(Constants.KEY_NAME));
+            conversation.put(Constants.KEY_SENDERS_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
+            conversation.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
+            conversation.put(Constants.KEY_RECEIVERS_NAME,receiverUser.name);
+            conversation.put(Constants.KEY_RECEIVERS_IMAGE,receiverUser.image);
+            conversation.put(Constants.KEY_LAST_MESSAGE,binding.message.getText().toString());
+            conversation.put(Constants.KEY_TIMESTAMP,new Date());
+            addConversation(conversation);
+        }
         binding.message.setText(null);
     }
 
@@ -120,7 +140,33 @@ public class ChatActivity extends AppCompatActivity {
             binding.chatRecyclerView.setVisibility(View.VISIBLE);
         }
         binding.progressBar.setVisibility(View.INVISIBLE);
+        if(conversationId == null){
+            checkForConversations();
+        }
     };
+
+    void listenAvailabilityOfReceiver(){
+        database.collection(Constants.KEY_COLLECTION_USERS)
+                .document(receiverUser.id)
+                .addSnapshotListener(ChatActivity.this,(value, error)->{
+                    if(error != null){
+                        return;
+                    }
+                    if(value != null){
+                        if(value.getLong(Constants.KEY_AVAILABILITY) != null){
+                            int availability = Objects.requireNonNull(
+                                    value.getLong(Constants.KEY_AVAILABILITY)
+                            ).intValue();
+                            isReceiverAvailable = availability == 1;
+                        }
+                    }
+                    if(isReceiverAvailable){
+                        binding.userStatus.setText(R.string.online);
+                    }else{
+                        binding.userStatus.setText(R.string.offline);
+                    }
+                });
+    }
 
 
     void listenMessages(){
@@ -165,4 +211,55 @@ public class ChatActivity extends AppCompatActivity {
         return (new SimpleDateFormat("MMMM dd, yyyy - hh:mm a", Locale.getDefault())).format(date);
     }
 
+    void addConversation(HashMap<String,Object> conversation){
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .add(conversation)
+                .addOnSuccessListener(documentReference -> conversationId = documentReference.getId());
+    }
+
+    void updateConversation(String message){
+        DocumentReference documentReference =
+                database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
+
+        documentReference.update(
+                Constants.KEY_LAST_MESSAGE, message,
+                Constants.KEY_TIMESTAMP, new Date()
+        );
+    }
+
+
+    void checkForConversations(){
+        if(chatMessages.size() != 0){
+            checkForConversationRemotely(
+                    preferenceManager.getString(Constants.KEY_USER_ID),
+                    receiverUser.id
+            );
+            checkForConversationRemotely(
+                    receiverUser.id,
+                    preferenceManager.getString(Constants.KEY_USER_ID)
+            );
+        }
+    }
+
+    void checkForConversationRemotely(String senderId, String receiverId){
+        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Constants.KEY_SENDER_ID,senderId)
+                .whereEqualTo(Constants.KEY_RECEIVER_ID,receiverId)
+                .get()
+                .addOnCompleteListener(conversationOnCompleteListener);
+    }
+
+
+    private final OnCompleteListener<QuerySnapshot> conversationOnCompleteListener = task -> {
+        if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() > 0){
+            DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0);
+            conversationId = documentSnapshot.getId();
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        listenAvailabilityOfReceiver();
+    }
 }

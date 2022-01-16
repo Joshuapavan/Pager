@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_30sdp"
-        android:background="@drawable/mail_password_bg"
+        android:layout_height="@dimen/_40sdp"
+        android:background="@drawable/container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,7 +22,7 @@
             android:layout_height="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_40sdp"
-            android:background="@drawable/mail_password_bg"
+            android:background="@drawable/container"
             android:hint="@string/search_new_connection"
             android:padding="@dimen/_5sdp"
             android:textColor="@color/primaryText"
@@ -65,7 +65,7 @@
         android:id="@+id/userRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:overScrollMode="never"

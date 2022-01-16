@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textSize="@dimen/_24sdp"
+    android:background="@color/primaryColor"
     >
 
 </com.vanniktech.emoji.EmojiTextView>
