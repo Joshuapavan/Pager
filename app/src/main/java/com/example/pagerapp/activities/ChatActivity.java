@@ -73,7 +73,7 @@ public class ChatActivity extends BaseActivity {
         setListeners(); // method to set the listeners to trigger the methods //
         loadReceiverDetails(); // to retrieve the receiver's data //
         init(); // initialising the variables //
-        listenMessages(); // method to check for the messages //
+        listenMessages(); // method to check for the incoming messages //
     }
 
     void init(){
@@ -104,6 +104,19 @@ public class ChatActivity extends BaseActivity {
         }
         return networkInfo != null && networkInfo.isConnected();
     }
+
+    void listenMessages(){
+        database.collection(Keys.COLLECTION_CHAT)
+                .whereEqualTo(Keys.SENDER_ID,preferenceManager.getString(Keys.USER_ID))
+                .whereEqualTo(Keys.RECEIVER_ID,receiverUser.id)
+                .addSnapshotListener(eventListener);
+
+        database.collection(Keys.COLLECTION_CHAT)
+                .whereEqualTo(Keys.SENDER_ID,receiverUser.id)
+                .whereEqualTo(Keys.RECEIVER_ID,preferenceManager.getString(Keys.USER_ID))
+                .addSnapshotListener(eventListener);
+    }
+
 
     void sendMessage(View v){
         if(isConnectedToInternet()){
@@ -232,7 +245,7 @@ public class ChatActivity extends BaseActivity {
     };
 
     void listenAvailabilityOfReceiver(){
-        database.collection(Keys.KEY_COLLECTION_USERS)
+        database.collection(Keys.COLLECTION_USERS)
                 .document(receiverUser.id)
                 .addSnapshotListener(ChatActivity.this,(value, error)->{
                     if(error != null){
@@ -258,19 +271,6 @@ public class ChatActivity extends BaseActivity {
                         binding.userStatus.setText(R.string.offline);
                     }
                 });
-    }
-
-
-    void listenMessages(){
-        database.collection(Keys.COLLECTION_CHAT)
-                .whereEqualTo(Keys.SENDER_ID,preferenceManager.getString(Keys.USER_ID))
-                .whereEqualTo(Keys.RECEIVER_ID,receiverUser.id)
-                .addSnapshotListener(eventListener);
-
-        database.collection(Keys.COLLECTION_CHAT)
-                .whereEqualTo(Keys.SENDER_ID,receiverUser.id)
-                .whereEqualTo(Keys.RECEIVER_ID,preferenceManager.getString(Keys.USER_ID))
-                .addSnapshotListener(eventListener);
     }
 
     Bitmap getBitmapFromEncodedString(String encodedImage){

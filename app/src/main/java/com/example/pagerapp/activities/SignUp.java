@@ -87,7 +87,7 @@ public class SignUp extends AppCompatActivity {
         user.put(Keys.KEY_PASSWORD,binding.password.getText().toString());
         user.put(Keys.IMAGE,encodedImage);
 
-        database.collection(Keys.KEY_COLLECTION_USERS)
+        database.collection(Keys.COLLECTION_USERS)
                 .add(user)
                 .addOnSuccessListener(documentReference -> { //when user is added successfully this block will be executed//
                     loading(false);

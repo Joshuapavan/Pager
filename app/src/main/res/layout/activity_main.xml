@@ -33,6 +33,7 @@
             android:id="@+id/searchBox"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_30sdp"
+            android:fontFamily="@font/ubuntu_regular"
             android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginEnd="@dimen/_40sdp"
             android:background="@drawable/container"

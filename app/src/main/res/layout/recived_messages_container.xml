@@ -22,6 +22,7 @@
     <TextView
         android:id="@+id/textMessage"
         android:layout_width="0dp"
+        android:fontFamily="@font/ubuntu_medium"
         android:layout_height="wrap_content"
         android:background="@drawable/recieved_messaage_bg"
         android:paddingStart="@dimen/_12sdp"
@@ -41,6 +42,7 @@
         android:id="@+id/dateTime"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/ubuntu_regular"
         android:textColor="@color/secondaryText"
         android:layout_marginTop="@dimen/_4sdp"
         android:textSize="@dimen/_8ssp"

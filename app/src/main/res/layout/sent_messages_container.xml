@@ -14,6 +14,7 @@
         android:paddingStart="@dimen/_12sdp"
         android:paddingTop="@dimen/_8sdp"
         android:paddingEnd="@dimen/_12sdp"
+        android:fontFamily="@font/ubuntu_medium"
         android:paddingBottom="@dimen/_8sdp"
         app:layout_constraintWidth_max= "wrap"
         android:textColor="@color/white"
@@ -26,6 +27,7 @@
     <TextView
         android:id="@+id/dateTime"
         android:layout_width="0dp"
+        android:fontFamily="@font/ubuntu_regular"
         android:layout_height="wrap_content"
         android:textColor="@color/secondaryText"
         android:layout_marginTop="@dimen/_4sdp"

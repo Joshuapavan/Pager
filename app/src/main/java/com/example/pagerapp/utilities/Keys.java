@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 //All Keys which will be used when a new user Signs up which can be used to refer inside the app//
 public class Keys {
-    public static final String KEY_COLLECTION_USERS = "users";
+    public static final String COLLECTION_USERS = "users";
     public static final String KEY_NAME = "name";
     public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";

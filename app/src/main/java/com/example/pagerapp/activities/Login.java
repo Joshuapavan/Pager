@@ -127,7 +127,7 @@ public class Login extends AppCompatActivity {
     private void logIn(){
         loadingAnimation(true);
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection(Keys.KEY_COLLECTION_USERS)
+        firebaseFirestore.collection(Keys.COLLECTION_USERS)
                 .whereEqualTo(Keys.KEY_EMAIL,binding.email.getText().toString().trim())
                 .whereEqualTo(Keys.KEY_PASSWORD,binding.password.getText().toString().trim())
                 .get()

@@ -50,7 +50,7 @@ public class Profile extends AppCompatActivity {
         Snackbar.make(binding.profileActivity,"Logging Out!",Snackbar.LENGTH_SHORT).show();
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
-                database.collection(Keys.KEY_COLLECTION_USERS).document(
+                database.collection(Keys.COLLECTION_USERS).document(
                         preferenceManager.getString(Keys.USER_ID)
                 );
         HashMap<String, Object> updates = new HashMap<>();

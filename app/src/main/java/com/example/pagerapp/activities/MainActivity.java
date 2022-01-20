@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         preferenceManager.putString(Keys.FCM_TOKEN, token);
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = firebaseFirestore.collection(Keys.KEY_COLLECTION_USERS)
+        DocumentReference documentReference = firebaseFirestore.collection(Keys.COLLECTION_USERS)
                 .document(preferenceManager.getString(Keys.USER_ID));
         documentReference.update(Keys.FCM_TOKEN,token)
                 .addOnSuccessListener(task -> Snackbar.make(binding.mainLayout,"Welcome "+preferenceManager.getString(Keys.KEY_NAME)+"!",Snackbar.LENGTH_SHORT).show())

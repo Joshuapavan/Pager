@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:textSize="@dimen/_24sdp"
+    android:fontFamily="@font/ubuntu_regular"
     android:background="@color/primaryColor"
     >
 
