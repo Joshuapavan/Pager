@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.pagerapp.databinding.ActivitySignUpBinding;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,24 +82,24 @@ public class SignUp extends AppCompatActivity {
         loading(true); //activating the loading screen//
         FirebaseFirestore database = FirebaseFirestore.getInstance();  // Creating an instance of firebase to store data//
         HashMap<String,Object> user = new HashMap<>(); //Creating an Hashmap which will hold the data based on the string constants in utilities package//
-        user.put(Constants.KEY_NAME,binding.userName.getText().toString());
-        user.put(Constants.KEY_EMAIL,binding.email.getText().toString());
-        user.put(Constants.KEY_PASSWORD,binding.password.getText().toString());
-        user.put(Constants.KEY_IMAGE,encodedImage);
+        user.put(Keys.KEY_NAME,binding.userName.getText().toString());
+        user.put(Keys.KEY_EMAIL,binding.email.getText().toString());
+        user.put(Keys.KEY_PASSWORD,binding.password.getText().toString());
+        user.put(Keys.IMAGE,encodedImage);
 
-        database.collection(Constants.KEY_COLLECTION_USERS)
+        database.collection(Keys.KEY_COLLECTION_USERS)
                 .add(user)
                 .addOnSuccessListener(documentReference -> { //when user is added successfully this block will be executed//
                     loading(false);
-                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN,true); //storing that the user is signed in and storing all the values in the preference//
-                    preferenceManager.putString(Constants.KEY_USER_ID,documentReference.getId());
-                    preferenceManager.putString(Constants.KEY_NAME,binding.userName.getText().toString());
-                    preferenceManager.putString(Constants.KEY_IMAGE,encodedImage);
+                    preferenceManager.putBoolean(Keys.KEY_IS_SIGNED_IN,true); //storing that the user is signed in and storing all the values in the preference//
+                    preferenceManager.putString(Keys.USER_ID,documentReference.getId());
+                    preferenceManager.putString(Keys.KEY_NAME,binding.userName.getText().toString());
+                    preferenceManager.putString(Keys.IMAGE,encodedImage);
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }).addOnFailureListener(exception ->{ //this block will be executed when there is an issue with the user's login//
-                     loading(false);
+                    loading(false);
                     Snackbar.make(binding.signInLayout, Objects.requireNonNull(exception.getMessage()),Snackbar.LENGTH_SHORT).show();
         });
 

@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.pagerapp.R;
 import com.example.pagerapp.databinding.ActivityLoginBinding;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,7 +40,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         preferenceManager = new PreferenceManager(getApplicationContext());
-        if(preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)){
+        if(preferenceManager.getBoolean(Keys.KEY_IS_SIGNED_IN)){
             Intent intent = new Intent(getApplicationContext(),MainActivity.class);
             startActivity(intent);
             finish();
@@ -127,17 +127,17 @@ public class Login extends AppCompatActivity {
     private void logIn(){
         loadingAnimation(true);
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
-                .whereEqualTo(Constants.KEY_EMAIL,binding.email.getText().toString().trim())
-                .whereEqualTo(Constants.KEY_PASSWORD,binding.password.getText().toString().trim())
+        firebaseFirestore.collection(Keys.KEY_COLLECTION_USERS)
+                .whereEqualTo(Keys.KEY_EMAIL,binding.email.getText().toString().trim())
+                .whereEqualTo(Keys.KEY_PASSWORD,binding.password.getText().toString().trim())
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() >0){
                         DocumentSnapshot documentSnapshot = task.getResult().getDocuments().get(0); //used to fetch data from the Firestore  which can be later checked in the given data//
-                        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN,true); //assigning that the user has logged in and initialising all preference variables//
-                        preferenceManager.putString(Constants.KEY_USER_ID,documentSnapshot.getId());
-                        preferenceManager.putString(Constants.KEY_NAME,documentSnapshot.getString(Constants.KEY_NAME));
-                        preferenceManager.putString(Constants.KEY_IMAGE,documentSnapshot.getString(Constants.KEY_IMAGE));
+                        preferenceManager.putBoolean(Keys.KEY_IS_SIGNED_IN,true); //assigning that the user has logged in and initialising all preference variables//
+                        preferenceManager.putString(Keys.USER_ID,documentSnapshot.getId());
+                        preferenceManager.putString(Keys.KEY_NAME,documentSnapshot.getString(Keys.KEY_NAME));
+                        preferenceManager.putString(Keys.IMAGE,documentSnapshot.getString(Keys.IMAGE));
                         Intent intent = new Intent(getApplicationContext(),MainActivity.class);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);

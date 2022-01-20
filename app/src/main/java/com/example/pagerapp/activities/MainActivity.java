@@ -14,7 +14,7 @@ import com.example.pagerapp.databinding.ActivityMainBinding;
 import com.example.pagerapp.listeners.ConversationListener;
 import com.example.pagerapp.models.ChatMessage;
 import com.example.pagerapp.models.User;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentChange;
@@ -59,12 +59,12 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     }
 
     void listenConversations(){
-        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .whereEqualTo(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID))
+        database.collection(Keys.COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Keys.SENDER_ID,preferenceManager.getString(Keys.USER_ID))
                 .addSnapshotListener(eventListener);
 
-        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .whereEqualTo(Constants.KEY_RECEIVER_ID,preferenceManager.getString(Constants.KEY_USER_ID))
+        database.collection(Keys.COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Keys.RECEIVER_ID,preferenceManager.getString(Keys.USER_ID))
                 .addSnapshotListener(eventListener);
     }
 
@@ -77,33 +77,33 @@ public class MainActivity extends BaseActivity implements ConversationListener {
         if(value != null){
             for(DocumentChange documentChange : value.getDocumentChanges()){
                 if(documentChange.getType() == DocumentChange.Type.ADDED){
-                    String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
-                    String receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
+                    String senderId = documentChange.getDocument().getString(Keys.SENDER_ID);
+                    String receiverId = documentChange.getDocument().getString(Keys.RECEIVER_ID);
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderId = senderId;
                     chatMessage.receiverId = receiverId;
 
-                    if(preferenceManager.getString(Constants.KEY_USER_ID).equals(senderId)){
-                        chatMessage.conversationImage = documentChange.getDocument().getString(Constants.KEY_RECEIVERS_IMAGE);
-                        chatMessage.conversationName = documentChange.getDocument().getString(Constants.KEY_RECEIVERS_NAME);
-                        chatMessage.conversationId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
+                    if(preferenceManager.getString(Keys.USER_ID).equals(senderId)){
+                        chatMessage.conversationImage = documentChange.getDocument().getString(Keys.RECEIVERS_IMAGE);
+                        chatMessage.conversationName = documentChange.getDocument().getString(Keys.RECEIVERS_NAME);
+                        chatMessage.conversationId = documentChange.getDocument().getString(Keys.RECEIVER_ID);
                     }else{
-                        chatMessage.conversationImage = documentChange.getDocument().getString(Constants.KEY_SENDERS_IMAGE);
-                        chatMessage.conversationName = documentChange.getDocument().getString(Constants.KEY_SENDERS_NAME);
-                        chatMessage.conversationId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
+                        chatMessage.conversationImage = documentChange.getDocument().getString(Keys.SENDERS_IMAGE);
+                        chatMessage.conversationName = documentChange.getDocument().getString(Keys.SENDERS_NAME);
+                        chatMessage.conversationId = documentChange.getDocument().getString(Keys.SENDER_ID);
                     }
-                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
-                    chatMessage.date = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    chatMessage.message = documentChange.getDocument().getString(Keys.LAST_MESSAGE);
+                    chatMessage.date = documentChange.getDocument().getDate(Keys.TIMESTAMP);
                     conversations.add(chatMessage);
                 }
                 else if(documentChange.getType() == DocumentChange.Type.MODIFIED){
                     for (int i = 0 ; i < conversations.size() ; i++){
-                        String senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
-                        String receiversId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
+                        String senderId = documentChange.getDocument().getString(Keys.SENDER_ID);
+                        String receiversId = documentChange.getDocument().getString(Keys.RECEIVER_ID);
 
                         if(conversations.get(i).senderId.equals(senderId) && conversations.get(i).receiverId.equals(receiversId)){
-                            conversations.get(i).message = documentChange.getDocument().getString(Constants.KEY_LAST_MESSAGE);
-                            conversations.get(i).date = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                            conversations.get(i).message = documentChange.getDocument().getString(Keys.LAST_MESSAGE);
+                            conversations.get(i).date = documentChange.getDocument().getDate(Keys.TIMESTAMP);
                             break;
                         }
                     }
@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     }
 
     private void loadUserDetails(){
-        byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
+        byte[] bytes = Base64.decode(preferenceManager.getString(Keys.IMAGE),Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         binding.userImage.setImageBitmap(bitmap);
     }
@@ -136,20 +136,20 @@ public class MainActivity extends BaseActivity implements ConversationListener {
     }
 
     private void updateToken(String token){
-        preferenceManager.putString(Constants.KEY_FCM_TOKEN, token);
+        preferenceManager.putString(Keys.FCM_TOKEN, token);
 
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-        DocumentReference documentReference = firebaseFirestore.collection(Constants.KEY_COLLECTION_USERS)
-                .document(preferenceManager.getString(Constants.KEY_USER_ID));
-        documentReference.update(Constants.KEY_FCM_TOKEN,token)
-                .addOnSuccessListener(task -> Snackbar.make(binding.mainLayout,"Welcome "+preferenceManager.getString(Constants.KEY_NAME)+"!",Snackbar.LENGTH_SHORT).show())
+        DocumentReference documentReference = firebaseFirestore.collection(Keys.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Keys.USER_ID));
+        documentReference.update(Keys.FCM_TOKEN,token)
+                .addOnSuccessListener(task -> Snackbar.make(binding.mainLayout,"Welcome "+preferenceManager.getString(Keys.KEY_NAME)+"!",Snackbar.LENGTH_SHORT).show())
                 .addOnFailureListener(exception -> Snackbar.make(binding.mainLayout, "Unable to update token, Please restart the app.",Snackbar.LENGTH_SHORT).show());
     }
 
     @Override
     public void onConversationClicked(User user) {
         Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-        intent.putExtra(Constants.KEY_USER,user);
+        intent.putExtra(Keys.USER,user);
         startActivity(intent);
     }
 }

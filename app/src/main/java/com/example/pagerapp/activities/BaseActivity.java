@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -21,20 +21,20 @@ public class BaseActivity extends AppCompatActivity {
         PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
         FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-        documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
-                .document(preferenceManager.getString(Constants.KEY_USER_ID));
+        documentReference = database.collection(Keys.KEY_COLLECTION_USERS)
+                .document(preferenceManager.getString(Keys.USER_ID));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        documentReference.update(Constants.KEY_AVAILABILITY,0);
+        documentReference.update(Keys.AVAILABILITY,0);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        documentReference.update(Constants.KEY_AVAILABILITY,1);
+        documentReference.update(Keys.AVAILABILITY,1);
     }
 
 }

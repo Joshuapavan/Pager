@@ -22,7 +22,7 @@ import com.example.pagerapp.models.ChatMessage;
 import com.example.pagerapp.models.User;
 import com.example.pagerapp.network.ApiClient;
 import com.example.pagerapp.network.ApiService;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -56,25 +56,24 @@ import retrofit2.Response;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class ChatActivity extends BaseActivity {
 
-    ActivityChatBinding binding;
-    User receiverUser;
-    private List<ChatMessage> chatMessages;
-    ChatAdapter chatAdapter;
-    PreferenceManager preferenceManager;
-    FirebaseFirestore database;
-    String conversationId = null;
-
-    private Boolean isReceiverAvailable = false;
+    ActivityChatBinding binding;  // Binding //
+    User receiverUser; // Receiver Object //
+    private List<ChatMessage> chatMessages; //List of ChatMessage class object //
+    ChatAdapter chatAdapter; //Chat Adapter to display the data //
+    PreferenceManager preferenceManager; // instance of preference manager for data persistence //
+    FirebaseFirestore database; // Instance of firebase to provide cloud messaging //
+    String conversationId = null; // conversation ID to uniquely identify each conversation //
+    private Boolean isReceiverAvailable = false; //Boolean value to check if the user is online or not //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setListeners();
-        loadReceiverDetails();
-        init();
-        listenMessages();
+        setListeners(); // method to set the listeners to trigger the methods //
+        loadReceiverDetails(); // to retrieve the receiver's data //
+        init(); // initialising the variables //
+        listenMessages(); // method to check for the messages //
     }
 
     void init(){
@@ -83,7 +82,7 @@ public class ChatActivity extends BaseActivity {
         chatAdapter = new ChatAdapter(
                 chatMessages,
                 getBitmapFromEncodedString(receiverUser.image),
-                preferenceManager.getString(Constants.KEY_USER_ID)
+                preferenceManager.getString(Keys.USER_ID)
         );
         binding.chatRecyclerView.setAdapter(chatAdapter);
         database =  FirebaseFirestore.getInstance();
@@ -108,29 +107,30 @@ public class ChatActivity extends BaseActivity {
 
     void sendMessage(View v){
         if(isConnectedToInternet()){
-            HashMap<String, Object> message = new HashMap<>();
             EmojiTextView emojiTextView = (EmojiTextView) LayoutInflater // Google Emoji Keyboard//
                     .from(v.getContext())
                     .inflate(R.layout.emoji_text_view,binding.chatLayout,false);
             emojiTextView.setText(binding.message.getText().toString());
 
-            message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
-            message.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
-            message.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
-            message.put(Constants.KEY_TIMESTAMP,new Date());
-            database.collection(Constants.KEY_COLLECTION_CHAT).add(message);
+            HashMap<String, Object> message = new HashMap<>();
+            message.put(Keys.SENDER_ID, preferenceManager.getString(Keys.USER_ID));
+            message.put(Keys.RECEIVER_ID,receiverUser.id);
+            message.put(Keys.MESSAGE, binding.message.getText().toString());
+            message.put(Keys.TIMESTAMP,new Date());
+            database.collection(Keys.COLLECTION_CHAT).add(message);
+
             if(conversationId != null){
                 updateConversation(binding.message.getText().toString());
             }else{
                 HashMap<String, Object> conversation = new HashMap<>();
-                conversation.put(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
-                conversation.put(Constants.KEY_SENDERS_NAME,preferenceManager.getString(Constants.KEY_NAME));
-                conversation.put(Constants.KEY_SENDERS_IMAGE,preferenceManager.getString(Constants.KEY_IMAGE));
-                conversation.put(Constants.KEY_RECEIVER_ID,receiverUser.id);
-                conversation.put(Constants.KEY_RECEIVERS_NAME,receiverUser.name);
-                conversation.put(Constants.KEY_RECEIVERS_IMAGE,receiverUser.image);
-                conversation.put(Constants.KEY_LAST_MESSAGE,binding.message.getText().toString());
-                conversation.put(Constants.KEY_TIMESTAMP,new Date());
+                conversation.put(Keys.SENDER_ID,preferenceManager.getString(Keys.USER_ID));
+                conversation.put(Keys.SENDERS_NAME,preferenceManager.getString(Keys.KEY_NAME));
+                conversation.put(Keys.SENDERS_IMAGE,preferenceManager.getString(Keys.IMAGE));
+                conversation.put(Keys.RECEIVER_ID,receiverUser.id);
+                conversation.put(Keys.RECEIVERS_NAME,receiverUser.name);
+                conversation.put(Keys.RECEIVERS_IMAGE,receiverUser.image);
+                conversation.put(Keys.LAST_MESSAGE,binding.message.getText().toString());
+                conversation.put(Keys.TIMESTAMP,new Date());
                 addConversation(conversation);
             }
             if (!isReceiverAvailable){
@@ -139,14 +139,14 @@ public class ChatActivity extends BaseActivity {
                     tokens.put(receiverUser.token);
 
                     JSONObject data = new JSONObject();
-                    data.put(Constants.KEY_USER_ID,preferenceManager.getString(Constants.KEY_USER_ID));
-                    data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
-                    data.put(Constants.KEY_FCM_TOKEN,preferenceManager.getString(Constants.KEY_FCM_TOKEN));
-                    data.put(Constants.KEY_MESSAGE, binding.message.getText().toString());
+                    data.put(Keys.USER_ID,preferenceManager.getString(Keys.USER_ID));
+                    data.put(Keys.KEY_NAME, preferenceManager.getString(Keys.KEY_NAME));
+                    data.put(Keys.FCM_TOKEN,preferenceManager.getString(Keys.FCM_TOKEN));
+                    data.put(Keys.MESSAGE, binding.message.getText().toString());
 
                     JSONObject body = new JSONObject();
-                    body.put(Constants.REMOTE_MSG_DATA, data);
-                    body.put(Constants.REMOTE_MSG_REGISTRATION_IDS,tokens);
+                    body.put(Keys.REMOTE_MSG_DATA, data);
+                    body.put(Keys.REMOTE_MSG_REGISTRATION_IDS,tokens);
 
                     sendNotification(body.toString());
 
@@ -159,7 +159,6 @@ public class ChatActivity extends BaseActivity {
         else{
             showSnackBar("No Internet, please check your internet");
         }
-
     }
 
     void showSnackBar(String message){
@@ -169,7 +168,7 @@ public class ChatActivity extends BaseActivity {
 
     private void sendNotification(String messageBody){
         ApiClient.getClient().create(ApiService.class).sendMessage(
-                Constants.getRemoteMsgHeaders(),
+                Keys.getRemoteMsgHeaders(),
                 messageBody
         ).enqueue(new Callback<String>() {
             @Override
@@ -209,11 +208,11 @@ public class ChatActivity extends BaseActivity {
             for(DocumentChange documentChange : value.getDocumentChanges()){
                 if(documentChange.getType() == DocumentChange.Type.ADDED){
                     ChatMessage chatMessage = new ChatMessage();
-                    chatMessage.senderId = documentChange.getDocument().getString(Constants.KEY_SENDER_ID);
-                    chatMessage.receiverId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
-                    chatMessage.message = documentChange.getDocument().getString(Constants.KEY_MESSAGE);
-                    chatMessage.dateTime = getFormattedDate(documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP));
-                    chatMessage.date = documentChange.getDocument().getDate(Constants.KEY_TIMESTAMP);
+                    chatMessage.senderId = documentChange.getDocument().getString(Keys.SENDER_ID);
+                    chatMessage.receiverId = documentChange.getDocument().getString(Keys.RECEIVER_ID);
+                    chatMessage.message = documentChange.getDocument().getString(Keys.MESSAGE);
+                    chatMessage.dateTime = getFormattedDate(documentChange.getDocument().getDate(Keys.TIMESTAMP));
+                    chatMessage.date = documentChange.getDocument().getDate(Keys.TIMESTAMP);
                     chatMessages.add(chatMessage);
                 }
             }
@@ -233,22 +232,22 @@ public class ChatActivity extends BaseActivity {
     };
 
     void listenAvailabilityOfReceiver(){
-        database.collection(Constants.KEY_COLLECTION_USERS)
+        database.collection(Keys.KEY_COLLECTION_USERS)
                 .document(receiverUser.id)
                 .addSnapshotListener(ChatActivity.this,(value, error)->{
                     if(error != null){
                         return;
                     }
                     if(value != null){
-                        if(value.getLong(Constants.KEY_AVAILABILITY) != null){
+                        if(value.getLong(Keys.AVAILABILITY) != null){
                             int availability = Objects.requireNonNull(
-                                    value.getLong(Constants.KEY_AVAILABILITY)
+                                    value.getLong(Keys.AVAILABILITY)
                             ).intValue();
                             isReceiverAvailable = availability == 1;
                         }
-                        receiverUser.token = value.getString(Constants.KEY_FCM_TOKEN);
+                        receiverUser.token = value.getString(Keys.FCM_TOKEN);
                         if(receiverUser.image == null){
-                            receiverUser.image = value.getString(Constants.KEY_IMAGE);
+                            receiverUser.image = value.getString(Keys.IMAGE);
                             chatAdapter.setReceiverProfileImage(getBitmapFromEncodedString(receiverUser.image));
                             chatAdapter.notifyItemRangeChanged(0,chatMessages.size());
                         }
@@ -263,14 +262,14 @@ public class ChatActivity extends BaseActivity {
 
 
     void listenMessages(){
-        database.collection(Constants.KEY_COLLECTION_CHAT)
-                .whereEqualTo(Constants.KEY_SENDER_ID,preferenceManager.getString(Constants.KEY_USER_ID))
-                .whereEqualTo(Constants.KEY_RECEIVER_ID,receiverUser.id)
+        database.collection(Keys.COLLECTION_CHAT)
+                .whereEqualTo(Keys.SENDER_ID,preferenceManager.getString(Keys.USER_ID))
+                .whereEqualTo(Keys.RECEIVER_ID,receiverUser.id)
                 .addSnapshotListener(eventListener);
 
-        database.collection(Constants.KEY_COLLECTION_CHAT)
-                .whereEqualTo(Constants.KEY_SENDER_ID,receiverUser.id)
-                .whereEqualTo(Constants.KEY_RECEIVER_ID,preferenceManager.getString(Constants.KEY_USER_ID))
+        database.collection(Keys.COLLECTION_CHAT)
+                .whereEqualTo(Keys.SENDER_ID,receiverUser.id)
+                .whereEqualTo(Keys.RECEIVER_ID,preferenceManager.getString(Keys.USER_ID))
                 .addSnapshotListener(eventListener);
     }
 
@@ -299,7 +298,7 @@ public class ChatActivity extends BaseActivity {
 
 
     void loadReceiverDetails(){
-        receiverUser = (User) getIntent().getSerializableExtra(Constants.KEY_USER);
+        receiverUser = (User) getIntent().getSerializableExtra(Keys.USER);
         binding.userName.setText(receiverUser.name);
         binding.userImage.setImageBitmap(getBitmapFromEncodedString(receiverUser.image));
     }
@@ -309,18 +308,18 @@ public class ChatActivity extends BaseActivity {
     }
 
     void addConversation(HashMap<String,Object> conversation){
-        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
+        database.collection(Keys.COLLECTION_CONVERSATIONS)
                 .add(conversation)
                 .addOnSuccessListener(documentReference -> conversationId = documentReference.getId());
     }
 
     void updateConversation(String message){
         DocumentReference documentReference =
-                database.collection(Constants.KEY_COLLECTION_CONVERSATIONS).document(conversationId);
+                database.collection(Keys.COLLECTION_CONVERSATIONS).document(conversationId);
 
         documentReference.update(
-                Constants.KEY_LAST_MESSAGE, message,
-                Constants.KEY_TIMESTAMP, new Date()
+                Keys.LAST_MESSAGE, message,
+                Keys.TIMESTAMP, new Date()
         );
     }
 
@@ -328,20 +327,20 @@ public class ChatActivity extends BaseActivity {
     void checkForConversations(){
         if(chatMessages.size() != 0){
             checkForConversationRemotely(
-                    preferenceManager.getString(Constants.KEY_USER_ID),
+                    preferenceManager.getString(Keys.USER_ID),
                     receiverUser.id
             );
             checkForConversationRemotely(
                     receiverUser.id,
-                    preferenceManager.getString(Constants.KEY_USER_ID)
+                    preferenceManager.getString(Keys.USER_ID)
             );
         }
     }
 
     void checkForConversationRemotely(String senderId, String receiverId){
-        database.collection(Constants.KEY_COLLECTION_CONVERSATIONS)
-                .whereEqualTo(Constants.KEY_SENDER_ID,senderId)
-                .whereEqualTo(Constants.KEY_RECEIVER_ID,receiverId)
+        database.collection(Keys.COLLECTION_CONVERSATIONS)
+                .whereEqualTo(Keys.SENDER_ID,senderId)
+                .whereEqualTo(Keys.RECEIVER_ID,receiverId)
                 .get()
                 .addOnCompleteListener(conversationOnCompleteListener);
     }

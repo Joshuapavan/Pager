@@ -9,7 +9,7 @@ public class PreferenceManager {
 
     //constructor for the preference Class//
     public PreferenceManager(Context context){
-        sharedPreferences = context.getSharedPreferences(Constants.KEY_PREFERENCE_NAME,Context.MODE_PRIVATE);
+        sharedPreferences = context.getSharedPreferences(Keys.KEY_PREFERENCE_NAME,Context.MODE_PRIVATE);
     }
 
     //Getters and setters for the shared preference data //

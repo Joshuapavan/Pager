@@ -13,7 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.example.pagerapp.R;
 import com.example.pagerapp.activities.ChatActivity;
 import com.example.pagerapp.models.User;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -32,24 +32,24 @@ public class MessagingService extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         User user = new User();
-        user.id = remoteMessage.getData().get(Constants.KEY_USER_ID);
-        user.name = remoteMessage.getData().get(Constants.KEY_NAME);
-        user.token = remoteMessage.getData().get(Constants.KEY_FCM_TOKEN);
+        user.id = remoteMessage.getData().get(Keys.USER_ID);
+        user.name = remoteMessage.getData().get(Keys.KEY_NAME);
+        user.token = remoteMessage.getData().get(Keys.FCM_TOKEN);
 
         int notificationID = new Random().nextInt();
         String channelId = "chat_message";
 
         Intent intent = new Intent(this, ChatActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(Constants.KEY_USER,user);
+        intent.putExtra(Keys.USER,user);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,0, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId);
         builder.setSmallIcon(R.drawable.ic_pager_icon);
         builder.setContentTitle(user.name);
-        builder.setContentText(remoteMessage.getData().get(Constants.KEY_MESSAGE));
+        builder.setContentText(remoteMessage.getData().get(Keys.MESSAGE));
         builder.setStyle(new NotificationCompat.BigTextStyle().bigText(
-                remoteMessage.getData().get(Constants.KEY_MESSAGE)
+                remoteMessage.getData().get(Keys.MESSAGE)
         ));
         builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
         builder.setContentIntent(pendingIntent);

@@ -8,7 +8,7 @@ import com.example.pagerapp.adapters.UsersAdapter;
 import com.example.pagerapp.databinding.ActivityUserBinding;
 import com.example.pagerapp.listeners.UserListener;
 import com.example.pagerapp.models.User;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -41,11 +41,11 @@ public class UserActivity extends BaseActivity implements UserListener {
     void getUsers(){
         isLoading(true);
         FirebaseFirestore database = FirebaseFirestore.getInstance();
-        database.collection(Constants.KEY_COLLECTION_USERS)
+        database.collection(Keys.KEY_COLLECTION_USERS)
                 .get()
                 .addOnCompleteListener(task -> {
                     isLoading(false);
-                    String currentUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+                    String currentUserId = preferenceManager.getString(Keys.USER_ID);
                     if(task.isSuccessful() && task.getResult() != null){
                         List<User> users = new ArrayList<>();
                         for(QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()){
@@ -53,10 +53,10 @@ public class UserActivity extends BaseActivity implements UserListener {
                                 continue;
                             }
                             User user = new User();
-                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
-                            user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
-                            user.image = (queryDocumentSnapshot.getString(Constants.KEY_IMAGE));
-                            user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+                            user.name = queryDocumentSnapshot.getString(Keys.KEY_NAME);
+                            user.email = queryDocumentSnapshot.getString(Keys.KEY_EMAIL);
+                            user.image = (queryDocumentSnapshot.getString(Keys.IMAGE));
+                            user.token = queryDocumentSnapshot.getString(Keys.FCM_TOKEN);
                             user.id = queryDocumentSnapshot.getId();
                             users.add(user);
                         }
@@ -90,7 +90,7 @@ public class UserActivity extends BaseActivity implements UserListener {
     @Override
     public void onUserListenerClicked(User user) {
         Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-        intent.putExtra(Constants.KEY_USER,user);
+        intent.putExtra(Keys.USER,user);
         startActivity(intent);
         finish();
     }

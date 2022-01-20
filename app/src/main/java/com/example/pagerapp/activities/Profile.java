@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.util.Base64;
 
 import com.example.pagerapp.databinding.ActivityProfileBinding;
-import com.example.pagerapp.utilities.Constants;
+import com.example.pagerapp.utilities.Keys;
 import com.example.pagerapp.utilities.PreferenceManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,10 +35,10 @@ public class Profile extends AppCompatActivity {
         setListeners();
     }
     private void loadUserDetails(){
-        byte[] bytes = Base64.decode(preferenceManager.getString(Constants.KEY_IMAGE),Base64.DEFAULT);
+        byte[] bytes = Base64.decode(preferenceManager.getString(Keys.IMAGE),Base64.DEFAULT);
         Bitmap bitmap = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
         binding.userImage.setImageBitmap(bitmap);
-        binding.userName.setText(preferenceManager.getString(Constants.KEY_NAME));
+        binding.userName.setText(preferenceManager.getString(Keys.KEY_NAME));
     }
 
     void setListeners(){
@@ -50,11 +50,11 @@ public class Profile extends AppCompatActivity {
         Snackbar.make(binding.profileActivity,"Logging Out!",Snackbar.LENGTH_SHORT).show();
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         DocumentReference documentReference =
-                database.collection(Constants.KEY_COLLECTION_USERS).document(
-                        preferenceManager.getString(Constants.KEY_USER_ID)
+                database.collection(Keys.KEY_COLLECTION_USERS).document(
+                        preferenceManager.getString(Keys.USER_ID)
                 );
         HashMap<String, Object> updates = new HashMap<>();
-        updates.put(Constants.KEY_FCM_TOKEN, FieldValue.delete());
+        updates.put(Keys.FCM_TOKEN, FieldValue.delete());
         documentReference.update(updates)
                 .addOnSuccessListener(unused -> {
                     preferenceManager.clear();
@@ -64,5 +64,6 @@ public class Profile extends AppCompatActivity {
                 .addOnFailureListener(e -> {
                     Snackbar.make(binding.profileActivity,"Unable to log out, please try again later.",Snackbar.LENGTH_SHORT).show();
                 });
+        finish();
     }
 }

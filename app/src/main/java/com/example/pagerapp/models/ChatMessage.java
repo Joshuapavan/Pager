@@ -2,9 +2,8 @@ package com.example.pagerapp.models;
 
 import java.util.Date;
 
-public class ChatMessage {
-
-    public String senderId, receiverId, message, dateTime;
-    public Date date;
-    public String conversationId, conversationName, conversationImage;
+public class ChatMessage { //Class Model for the Chat Activity //
+    public String senderId, receiverId, message, dateTime;  //Chat Variables//
+    public Date date; //Date object //
+    public String conversationId, conversationName, conversationImage; // Conversations Model for the main Activity//
 }
