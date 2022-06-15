@@ -2,6 +2,7 @@ package com.example.pagerapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -125,11 +126,17 @@ public class Login extends AppCompatActivity {
     }
 
     private void logIn(){
+
+//        byte[] base64 = binding.password.getText().toString().trim();
+//        byte[] password = Base64.decode(base64, Base64.DEFAULT);
+        byte[] password = binding.password.getText().toString().getBytes();
+        String encodedPassword = Base64.encodeToString(password,Base64.DEFAULT);
+
         loadingAnimation(true);
         FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.collection(Keys.COLLECTION_USERS)
                 .whereEqualTo(Keys.KEY_EMAIL,binding.email.getText().toString().trim())
-                .whereEqualTo(Keys.KEY_PASSWORD,binding.password.getText().toString().trim())
+                .whereEqualTo(Keys.KEY_PASSWORD,encodedPassword)
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful() && task.getResult() != null && task.getResult().getDocuments().size() >0){

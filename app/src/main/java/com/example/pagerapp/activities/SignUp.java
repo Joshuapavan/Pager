@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -82,9 +83,13 @@ public class SignUp extends AppCompatActivity {
         loading(true); //activating the loading screen//
         FirebaseFirestore database = FirebaseFirestore.getInstance();  // Creating an instance of firebase to store data//
         HashMap<String,Object> user = new HashMap<>(); //Creating an Hashmap which will hold the data based on the string constants in utilities package//
+
+        byte[] password = binding.password.getText().toString().getBytes();
+        String encodedPassword = Base64.encodeToString(password,Base64.DEFAULT);
+
         user.put(Keys.KEY_NAME,binding.userName.getText().toString());
         user.put(Keys.KEY_EMAIL,binding.email.getText().toString());
-        user.put(Keys.KEY_PASSWORD,binding.password.getText().toString());
+        user.put(Keys.KEY_PASSWORD,encodedPassword);
         user.put(Keys.IMAGE,encodedImage);
 
         database.collection(Keys.COLLECTION_USERS)
