@@ -1,4 +1,4 @@
-package com.example.pagerapp.network;
+package com.example.pagerapp.API;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
