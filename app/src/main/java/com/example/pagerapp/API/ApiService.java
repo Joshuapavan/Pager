@@ -1,4 +1,4 @@
-package com.example.pagerapp.network;
+package com.example.pagerapp.API;
 
 import java.util.HashMap;
 
