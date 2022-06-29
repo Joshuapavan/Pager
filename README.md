@@ -1,8 +1,9 @@
 # Pager
 A chat application built as a fun project using java to learn/understand android SDK, Firebase Cloud Messaging and FireBase FireStore.
 Feel free to contribute or use my code to build your projects.
+Contact me at : joshuapavan01@gmail.com
 
-To be implemented features:
+Features to be implemented:
 1. Search filters.
 2. Image Sharing.
 3. Calling Features.
