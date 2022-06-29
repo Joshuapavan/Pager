@@ -9,7 +9,7 @@ Features to be implemented:
 3. Calling Features.
 4. Many more.
 
-Screenshots of the application.
+Design of the application. (Created using AdobeXD)
 
 ![Lgin in](https://user-images.githubusercontent.com/79299848/176393220-59a63f90-ec72-4a49-b317-55fd24f598c6.svg)
 ![Sign up](https://user-images.githubusercontent.com/79299848/176393419-549b4e25-9f0a-43e1-82ca-66285ddf574a.svg)
