@@ -12,6 +12,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -164,7 +165,7 @@ public class ChatActivity extends BaseActivity {
                     sendNotification(body.toString());
 
                 }catch (Exception e){
-                    showSnackBar(e.getMessage());
+                    e.printStackTrace();
                 }
             }
             binding.message.setText(null);
@@ -193,7 +194,7 @@ public class ChatActivity extends BaseActivity {
                             JSONArray results = responseJson.getJSONArray("results");
                             if(responseJson.getInt("failure") == 1){
                                 JSONObject error = (JSONObject) results.get(0);
-                                showSnackBar(error.getString("error"));
+                                Log.e("error",error.getString("error") );
                             }
                         }
                     }catch (JSONException e){
@@ -206,7 +207,7 @@ public class ChatActivity extends BaseActivity {
 
             @Override
             public void onFailure(@NonNull Call<String> call,@NonNull Throwable t) {
-                showSnackBar(t.getMessage());
+                Log.e("error",t.getMessage());
             }
         });
     }
