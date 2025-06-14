@@ -54,6 +54,6 @@ A modern chat application built with Android SDK, Firebase Cloud Messaging and F
 Feel free to contribute to this project by creating pull requests or reporting issues.
 
 ## Contact
-For any queries, reach out to: joshuapavan01@gmail.com
+For any queries, reach out to: joshuapavan35@gmail.com
 
 
